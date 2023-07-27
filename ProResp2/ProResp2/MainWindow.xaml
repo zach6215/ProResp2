@@ -1,0 +1,158 @@
+﻿<Window x:Class="ProResp2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProResp2"
+        mc:Ignorable="d"
+        Title="ProResp" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="checkAllValvesButton" Content="Check All Valves"
+                    Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicButton}" 
+                    Click="checkAllValvesButton_Click"/>
+            <Button x:Name="startButton" Content="Start Experiment"
+                    Grid.Column="0" Grid.Row="3" Style="{StaticResource BasicButton}" 
+                    Click="startButton_Click"/>
+            <Button x:Name="createDataFileButton" Content="Create Data File"
+                    Grid.Column="0" Grid.Row="5" Style="{StaticResource BasicButton}" 
+                    Click="createDataFileButton_Click"/>
+        </Grid>
+        <Grid Grid.Column="3" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="selectValveTextBlock" TextAlignment="Center"
+                       Grid.Column="0" Grid.Row="0" Style="{StaticResource BasicTextBlock}">
+                Select Valves For<LineBreak/>
+                Experiment:
+            </TextBlock>
+            <ListBox x:Name="selectValveListBox" 
+                     Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicListBox}">
+            </ListBox>
+        </Grid>
+        <Grid Grid.Column="5" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="stopButton" Content="Stop"
+                    Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicButton}">
+            </Button>
+        </Grid>
+        <Grid Grid.Column="7" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <GroupBox x:Name="experimentGroupBox" Header="Current Experiment Data:"
+                      Grid.Column="0" Grid.Row="0" Style="{StaticResource BasicGroupBox}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="activeValveTextBlock"
+                               Grid.Column="0" Grid.Row="0" Style="{StaticResource BasicTextBlock}">
+                        Active Valve:
+                    </TextBlock>
+                    <TextBlock x:Name="currentCO2TextBlock"
+                               Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicTextBlock}">
+                        Current CO2:
+                    </TextBlock>
+                    <TextBlock x:Name="currentH2OTextBlock"
+                               Grid.Column="0" Grid.Row="2" Style="{StaticResource BasicTextBlock}">
+                        Current H2O:
+                    </TextBlock>
+                    <TextBlock x:Name="currentTempTextBlock"
+                               Grid.Column="0" Grid.Row="3" Style="{StaticResource BasicTextBlock}">
+                        Current Temperature:
+                    </TextBlock>
+                    <TextBlock x:Name="currentFlowTextBlock"
+                               Grid.Column="0" Grid.Row="4" Style="{StaticResource BasicTextBlock}">
+                        Current Flow:
+                    </TextBlock>
+                    <TextBlock x:Name="currentWeightTextBlock"
+                               Grid.Column="0" Grid.Row="5" Style="{StaticResource BasicTextBlock}">
+                        Sample Weight:
+                    </TextBlock>
+                    <TextBlock x:Name="previousValveTextBlock"
+                               Grid.Column="1" Grid.Row="0" Style="{StaticResource BasicTextBlock}">
+                        Previous Valve:
+                    </TextBlock>
+                    <TextBlock x:Name="finalCO2TextBlock"
+                               Grid.Column="1" Grid.Row="1" Style="{StaticResource BasicTextBlock}">
+                        Final CO2:
+                    </TextBlock>
+                    <TextBlock x:Name="finalH2OTextBlock"
+                               Grid.Column="1" Grid.Row="2" Style="{StaticResource BasicTextBlock}">
+                        Final H2O:
+                    </TextBlock>
+                    <TextBlock x:Name="finalTempTextBlock"
+                               Grid.Column="1" Grid.Row="3" Style="{StaticResource BasicTextBlock}">
+                        Final Temperature:
+                    </TextBlock>
+                    <TextBlock x:Name="finalFlowTextBlock"
+                               Grid.Column="1" Grid.Row="4" Style="{StaticResource BasicTextBlock}">
+                        Final Flow:
+                    </TextBlock>
+                    <TextBlock x:Name="previousWeightTextBlock"
+                               Grid.Column="1" Grid.Row="5" Style="{StaticResource BasicTextBlock}">
+                        Previous Weight:
+                    </TextBlock>
+                </Grid>
+            </GroupBox>
+            <GroupBox x:Name="valveWeightGroupBox" Header="Enter Valve Weights:"
+                      Grid.Column="0" Grid.Row="0" Style="{StaticResource BasicGroupBox}">
+                <Grid x:Name="valveWeightGrid">
+                    
+                </Grid>
+            </GroupBox>
+            <TextBlock x:Name="dataFileTextBlock"
+                Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicTextBlock}">
+                Current Data File:
+            </TextBlock>
+        </Grid>
+    </Grid>
+</Window>
