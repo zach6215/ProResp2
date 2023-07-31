@@ -23,6 +23,10 @@ namespace ProResp2
         public ValveWeightControl()
         {
             InitializeComponent();
+            this.DataContext = this;
         }
+
+        public int ValveNum { get; set; }
+        public string Weight { get; set; }
     }
 }

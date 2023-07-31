@@ -11,7 +11,7 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0"></TextBlock>
-        <TextBox Grid.Column="1"></TextBox>
+        <TextBlock Text="{Binding ValveNum, StringFormat='Valve {0}'}"></TextBlock>
+        <TextBox x:Name="textBox" MinWidth="10" MaxLines="1" Grid.Column="1" Text="{Binding Weight, Mode=TwoWay}"></TextBox>
     </Grid>
 </UserControl>

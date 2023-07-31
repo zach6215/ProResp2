@@ -53,6 +53,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <TextBlock x:Name="selectValveTextBlock" TextAlignment="Center"
                        Grid.Column="0" Grid.Row="0" Style="{StaticResource BasicTextBlock}">
@@ -62,6 +63,9 @@
             <ListBox x:Name="selectValveListBox" 
                      Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicListBox}">
             </ListBox>
+            <Button x:Name="selectAllValvesButton" Content="Select All Valves"
+                    Grid.Column="0" Grid.Row="2" Style="{StaticResource BasicButton}" 
+                    Click="selectAllValvesButton_Click"/>
         </Grid>
         <Grid Grid.Column="5" Grid.Row="1">
             <Grid.RowDefinitions>
@@ -70,7 +74,8 @@
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Button x:Name="stopButton" Content="Stop"
-                    Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicButton}">
+                    Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicButton}" 
+                    Click="stopButton_Click">
             </Button>
         </Grid>
         <Grid Grid.Column="7" Grid.Row="1">
