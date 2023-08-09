@@ -35,16 +35,35 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Button x:Name="checkAllValvesButton" Content="Check All Valves"
                     Grid.Column="0" Grid.Row="1" Style="{StaticResource BasicButton}" 
                     Click="checkAllValvesButton_Click"/>
-            <Button x:Name="startButton" Content="Start Experiment"
-                    Grid.Column="0" Grid.Row="3" Style="{StaticResource BasicButton}" 
-                    Click="startButton_Click"/>
             <Button x:Name="createDataFileButton" Content="Create Data File"
-                    Grid.Column="0" Grid.Row="5" Style="{StaticResource BasicButton}" 
+                    Grid.Column="0" Grid.Row="3" Style="{StaticResource BasicButton}" 
                     Click="createDataFileButton_Click"/>
+            <Grid Grid.Column="0" Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource BasicTextBlock}">
+                    Valve Switch Time (min):
+                </TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="0" Name="valveSwitchTextBox"
+                         MinWidth="30" MaxHeight="20" MaxLines="1" 
+                         PreviewTextInput="valveSwitchTextBox_PreviewTextInput">
+                    15
+                </TextBox>
+            </Grid>
+            <Button x:Name="startButton" Content="Start Experiment"
+                    Grid.Column="0" Grid.Row="7" Style="{StaticResource BasicButton}" 
+                    Click="startButton_Click"/>
         </Grid>
         <Grid Grid.Column="3" Grid.Row="1">
             <Grid.ColumnDefinitions>
