@@ -1,8 +1,10 @@
-﻿namespace ExperimentEngine
+﻿
+namespace ExperimentEngine
 {
     using System;
     using System.Timers;
     using System.Collections.Generic;
+    
 
     public class ExperimentEngine
     {
@@ -107,15 +109,18 @@
             }
         }
 
-        //Abhi: Add code to switch valves here. In the end it should invoke this.ValveSwitched event.
-        private void SwitchValves(Object source, ElapsedEventArgs e)
+        public void ChangeValve()
         {
+            if (this.currentNode.Next == null) 
+            {
+                this.currentNode = this.valvesList.First;
+            }
+            else
+            {
+                this.currentNode = this.currentNode.Next;
+            }
         }
 
-        public static void CheckAllValves(List<int> valveNumbers)
-        {
-
-        }
 
         public void Stop()
         {

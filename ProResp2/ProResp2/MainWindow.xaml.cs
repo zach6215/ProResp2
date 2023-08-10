@@ -81,7 +81,7 @@
 
         private void checkAllValvesButton_Click(object sender, RoutedEventArgs e)
         {
-
+            experimentViewModel.CheckAllPorts();
         }
 
         private void startButton_Click(object sender, RoutedEventArgs e)
@@ -149,6 +149,13 @@
                 binding.StringFormat = "Current Flow: {0}" + experimentViewModel.ActiveValve.FlowUnits;
                 binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                 this.currentFlowTextBlock.SetBinding(TextBlock.TextProperty, binding);
+
+                //Previous valve bindings
+                binding = new Binding("ValveNum");
+                binding.Source = this.experimentViewModel.PreviousValve;
+                binding.StringFormat = "Previous Valve: {0}";
+                binding.TargetNullValue = "n/a";
+                this.previousValveTextBlock.SetBinding(TextBlock.TextProperty, binding);
             }
             catch (Exception ex)
             {
