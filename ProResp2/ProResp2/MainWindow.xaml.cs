@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Text.RegularExpressions;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -15,6 +16,7 @@
     {
         ExperimentViewModel experimentViewModel = new ExperimentViewModel();
         List<CheckBox> valveCheckBoxes = new List<CheckBox>();
+        
 
         public MainWindow()
         {
@@ -24,12 +26,16 @@
             for (int i = 0; i < ExperimentViewModel.NumValves; i++)
             {
                 CheckBox newCheckBox = new CheckBox();
-                newCheckBox.Content = "Valve " + (i +1).ToString();
+                newCheckBox.Content = "Valve " + (i + 1).ToString();
+                newCheckBox.Name = "checkBoxValve" + (i + 1).ToString();
                 this.valveCheckBoxes.Add(newCheckBox);
             }
             this.SetValveWeightGrid(this.valveWeightGrid);
             this.selectValveListBox.ItemsSource = this.valveCheckBoxes;
             this.stopButton.IsEnabled = false;
+
+            //Set valve switch time
+            
         }
 
         private void SetValveWeightGrid(Grid argGrid)
@@ -57,11 +63,16 @@
                 for (int j = 0; j < numRows; j++)
                 {
                     ValveWeightControl valveWeightControl = new ValveWeightControl();
+                    valveWeightControl.Name = "valveWeightControl" + valveNum;
                     valveWeightControl.ValveNum = valveNum;
+
+                    //Bind textBox to checkBoxValve + valveNum
+                    Binding binding = new Binding("IsChecked");
+                    binding.Source = valveCheckBoxes[valveNum - 1];
+                    valveWeightControl.textBox.SetBinding(TextBox.IsEnabledProperty, binding);
 
                     Grid.SetColumn(valveWeightControl, i);
                     Grid.SetRow(valveWeightControl, j);
-                    
                     argGrid.Children.Add(valveWeightControl);
                     valveNum++;
                 }
@@ -147,7 +158,6 @@
 
             //Change UI View
             this.NewExperiment_UpdateUI();
-            //experimentEngine.Start();
         }
 
         private void NewExperiment_UpdateUI()
@@ -205,5 +215,12 @@
                 item.IsEnabled = true;
             }
         }
+
+        private void valveSwitchTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+        
     }
 }

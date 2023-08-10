@@ -18,21 +18,22 @@ namespace ProResp2
         DispatcherTimer valveSwitchTimer;
         private string? filePath;
         public const int NumValves = 24;
-        int dataPollSec = 5;
-        int valveSwitchMin = 15;
+        private int dataPollSec = 5;
+        private String valveSwitchMin = "15";
         private DateTime startDateTime;
-        //StreamWriter outputStream;
+        String[] valveWieghts = new String[24];
 
         public string? FilePath { get { return this.filePath; } set { this.filePath = value; } }
         public bool ExperimentRunning { get { return experimentRunning;} }
         public Valve ActiveValve { get { return this.activeValve; } set { this.activeValve = value; } }
+        public String ValveSwitchMin { get { return this.valveSwitchMin; } set { this.valveSwitchMin = value;} }
 
         Valve activeValve;
         Valve previousValve;
 
         public ExperimentViewModel()
         {
-
+            this.ValveSwitchMin = "15";
         }
 
         internal void StartNewExperiment(List<int> argValveNums)
