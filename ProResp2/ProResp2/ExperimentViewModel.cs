@@ -33,7 +33,7 @@ namespace ProResp2
 
         public ExperimentViewModel()
         {
-
+            this.ValveSwitchMin = "15";
         }
 
         internal void StartNewExperiment(List<int> argValveNums)
