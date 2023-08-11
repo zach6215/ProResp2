@@ -13,29 +13,11 @@ namespace ExperimentEngine
         private string dateTimeHeader;
         private DateTime startDateTime;
 
-
-        //public event EventHandler<DataUpdateEventArgs> DataUpdated;
-        //public event EventHandler<DataUpdateEventArgs> ValveSwitched;
-
-
         public string DateTimeHeader { get { return dateTimeHeader; } private set { dateTimeHeader = value; } }
         public string LI7000DataHeader { get { return lI7000DataHeader; } private set { lI7000DataHeader = value; } }
         public double DaysSinceStart { get { return (DateTime.Now.Date - startDateTime.Date).TotalDays; } }
         public Valve ActiveValve { get { return currentNode.Value; } }
-        //Abhi: This constructor can be used to create experiment for Check Valves Button
 
-        //public ExperimentEngine(List<int> argActiveValves)
-        //{
-        //    this.valvesList = new LinkedList<Valve>();
-
-        //    foreach (int valveNum in argActiveValves)
-        //    {
-        //        Valve newValve = new Valve(valveNum);
-
-        //        LinkedListNode<Valve> newNode = new LinkedListNode<Valve>(newValve);
-        //        this.valvesList.AddLast(newNode);
-        //    }
-        //}
 
         public ExperimentEngine(List<int> argActiveValves, List<double> argValveWeights)
         {
@@ -118,6 +100,7 @@ namespace ExperimentEngine
             {
                 this.currentNode = this.currentNode.Next;
             }
+            this.Poll();
         }
 
         public void Stop()

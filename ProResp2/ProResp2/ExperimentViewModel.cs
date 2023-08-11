@@ -9,6 +9,7 @@ namespace ProResp2
 {
     using System.Windows.Threading;
     using ExperimentEngine;
+    using System.Threading;
     using System.IO;
     using System.ComponentModel;
     internal class ExperimentViewModel : INotifyPropertyChanged
@@ -56,10 +57,16 @@ namespace ProResp2
             this.experimentEngine = new ExperimentEngine(argValveNums, argValveWeights);
 
             this.ActiveValve = experimentEngine.ActiveValve;
+            this.config();
+            this.open(this.ActiveValve.ValveNum);
 
             this.pollDataTimer = new DispatcherTimer();
             this.pollDataTimer.Interval = TimeSpan.FromSeconds(this.dataPollSec);
             this.pollDataTimer.Tick += this.PollData;
+
+            this.valveSwitchTimer = new DispatcherTimer();
+            this.valveSwitchTimer.Interval = TimeSpan.FromMinutes(valveSwitchTime);
+            this.valveSwitchTimer.Tick += this.SwitchValves;
 
             this.experimentRunning = true;
             this.WriteDataHeader();
@@ -86,13 +93,20 @@ namespace ProResp2
 
         public void SwitchValves(object sender, EventArgs e)
         {
+            if(this.pollDataTimer != null)
+            {
+                this.pollDataTimer.Stop();
+            }
             int currentValveNum = experimentEngine.ActiveValve.ValveNum;
             experimentEngine.ChangeValve();
             int nextValveNum = experimentEngine.ActiveValve.ValveNum;
 
             open(nextValveNum-1);
             close(currentValveNum-1);
-            
+            if(this.pollDataTimer != null)
+            {
+                this.pollDataTimer.Start();
+            }
         }
 
         private void WriteDataHeader()
