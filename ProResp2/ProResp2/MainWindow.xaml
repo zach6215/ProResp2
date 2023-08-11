@@ -56,9 +56,15 @@
                     Valve Switch Time (min.):
                 </TextBlock>
                 <TextBox Grid.Column="1" Grid.Row="0" Name="valveSwitchTextBox"
-                         MinWidth="30" MaxHeight="20" MaxLines="1" 
+                         MinWidth="30" MaxHeight="20" MaxLines="1"
                          PreviewTextInput="valveSwitchTextBox_PreviewTextInput">
-                    15
+                    <TextBox.Text>
+                        <Binding Source="experimentViewModel" Path="ValveSwitchMin" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <!--<Binding.ValidationRules>
+                                <local:ValveSwitchTimeValidationRule />
+                            </Binding.ValidationRules>-->
+                        </Binding>
+                    </TextBox.Text>
                 </TextBox>
             </Grid>
             <Button x:Name="startButton" Content="Start Experiment"

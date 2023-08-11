@@ -9,7 +9,8 @@ namespace ProResp2
     using System.Windows.Threading;
     using ExperimentEngine;
     using System.IO;
-    internal class ExperimentViewModel
+    using System.ComponentModel;
+    internal class ExperimentViewModel : INotifyPropertyChanged
     {
         //private static bool experimentRunning = false;
         private ExperimentEngine? experimentEngine;
@@ -21,25 +22,36 @@ namespace ProResp2
         private int dataPollSec = 5;
         private String valveSwitchMin = "15";
         private DateTime startDateTime;
-        String[] valveWieghts = new String[24];
+        private String[] valveWieghts = new String[24];
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public string? FilePath { get { return this.filePath; } set { this.filePath = value; } }
         public bool ExperimentRunning { get { return experimentRunning;} }
         public Valve ActiveValve { get { return this.activeValve; } set { this.activeValve = value; } }
-        public String ValveSwitchMin { get { return this.valveSwitchMin; } set { this.valveSwitchMin = value;} }
+        public String ValveSwitchMin { get { return this.valveSwitchMin; } 
+            set { this.valveSwitchMin = value; PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ValveSwitchMin")); } }
 
         Valve activeValve;
         Valve previousValve;
 
+        
+
         public ExperimentViewModel()
         {
-            this.ValveSwitchMin = "15";
         }
 
-        internal void StartNewExperiment(List<int> argValveNums)
+        internal void StartNewExperiment(List<int> argValveNums, List<double> argValveWeights)
         {
+            if (valveSwitchMin == null)
+            {
+                valveSwitchMin = "15";
+            }
+            if (!int.TryParse(valveSwitchMin, out int valveSwitchTime))
+            {
+                throw new Exception("Invalid valve switch time!");
+            }
 
-            this.experimentEngine = new ExperimentEngine(argValveNums);
+            this.experimentEngine = new ExperimentEngine(argValveNums, argValveWeights);
 
             this.ActiveValve = experimentEngine.ActiveValve;
 

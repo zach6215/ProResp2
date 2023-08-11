@@ -12,7 +12,11 @@ namespace ProResp2
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            throw new NotImplementedException();
+            if (int.TryParse(value.ToString(), out int valveSwitchTimeMin))
+            {
+                return ValidationResult.ValidResult;
+            }
+            return new ValidationResult(false, "Not an integer.");
         }
     }
 }
