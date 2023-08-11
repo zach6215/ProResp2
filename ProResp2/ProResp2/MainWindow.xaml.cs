@@ -1,4 +1,4 @@
-﻿namespace ProResp2
+namespace ProResp2
 {
     using System;
     using System.Collections.Generic;
@@ -91,7 +91,7 @@
 
         private void checkAllValvesButton_Click(object sender, RoutedEventArgs e)
         {
-
+          experimentViewModel.CheckAllPorts();
         }
 
         private void startButton_Click(object sender, RoutedEventArgs e)

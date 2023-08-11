@@ -1,4 +1,4 @@
-﻿namespace ExperimentEngine
+namespace ExperimentEngine
 {
     using System.ComponentModel;
     public class Valve : INotifyPropertyChanged

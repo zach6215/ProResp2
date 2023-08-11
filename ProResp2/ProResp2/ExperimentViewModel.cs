@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MccDaq;
 
 namespace ProResp2
 {
@@ -24,6 +25,7 @@ namespace ProResp2
         private DateTime startDateTime;
         private String[] valveWieghts = new String[24];
         public event PropertyChangedEventHandler? PropertyChanged;
+        MccBoard board = new MccBoard(0);
 
         public string? FilePath { get { return this.filePath; } set { this.filePath = value; } }
         public bool ExperimentRunning { get { return experimentRunning;} }
@@ -62,6 +64,7 @@ namespace ProResp2
             this.experimentRunning = true;
             this.WriteDataHeader();
             this.pollDataTimer.Start();
+            this.valveSwitchTimer.Start();
         }
 
         internal void StopExperiment()
@@ -72,6 +75,7 @@ namespace ProResp2
             this.experimentEngine = null;
             this.filePath = String.Empty;
             this.experimentRunning = false;
+            this.TurnOffAllPorts();
         }
 
         private void PollData(object sender, EventArgs e)
@@ -80,9 +84,15 @@ namespace ProResp2
             this.WriteValveData(this.ActiveValve);
         }
 
-        private void SwitchValves(object sender, EventArgs e)
+        public void SwitchValves(object sender, EventArgs e)
         {
+            int currentValveNum = experimentEngine.ActiveValve.ValveNum;
+            experimentEngine.ChangeValve();
+            int nextValveNum = experimentEngine.ActiveValve.ValveNum;
 
+            open(nextValveNum-1);
+            close(currentValveNum-1);
+            
         }
 
         private void WriteDataHeader()
@@ -123,6 +133,59 @@ namespace ProResp2
             {
                 sw.WriteLine(valveData);
                 sw.Close();
+            }
+        }
+        
+        public void CheckAllPorts()
+        {
+            config();
+            int numPorts = 24;
+
+            for (int i = 0; i < numPorts; i++)
+            {
+
+                Console.WriteLine("Testing port " + i);
+
+                SetPort(board, i, DigitalLogicState.High);
+                Thread.Sleep(2000);
+
+                SetPort(board, i, DigitalLogicState.Low);
+            }
+        }
+        void config()
+        {
+
+            ConfigurePort(board, DigitalPortType.FirstPortA);
+            ConfigurePort(board, DigitalPortType.FirstPortB);
+            ConfigurePort(board, DigitalPortType.FirstPortCH);
+            ConfigurePort(board, DigitalPortType.FirstPortCL);
+        }
+        void ConfigurePort(MccBoard board, DigitalPortType portType)
+        {
+            DigitalPortDirection direction = DigitalPortDirection.DigitalOut;
+            board.DConfigPort(portType, direction);
+        }
+
+        void SetPort(MccBoard board, int portNum, DigitalLogicState state)
+        {
+            board.DBitOut(DigitalPortType.FirstPortA, portNum, state);
+        }
+
+        private void open(int current)
+        {
+            SetPort(board, current, DigitalLogicState.High);
+        }
+        private void close(int current)
+        {
+            SetPort(board, current, DigitalLogicState.Low);
+        }
+        private void TurnOffAllPorts()
+        {
+            config();
+            // Turn off all ports
+            for (int i = 0; i < 24; i++)
+            {
+                SetPort(board, i, DigitalLogicState.Low);
             }
         }
     }

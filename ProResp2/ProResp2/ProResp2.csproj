@@ -11,4 +11,10 @@
     <ProjectReference Include="..\ExperimentEngine\ExperimentEngine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="MccDaq">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Measurement Computing\DAQ\MccDaq.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
