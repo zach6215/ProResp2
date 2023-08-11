@@ -110,7 +110,7 @@ namespace ExperimentEngine
 
         public void ChangeValve()
         {
-            if (this.currentNode.Next == null) 
+            if (this.currentNode.Next == null)
             {
                 this.currentNode = this.valvesList.First;
             }
@@ -127,7 +127,8 @@ namespace ExperimentEngine
             {
                 this.LI7000.CloseConnection();
             }
-            
+
             //Close stream
         }
     }
+}
