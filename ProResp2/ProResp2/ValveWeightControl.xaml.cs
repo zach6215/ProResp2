@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +18,7 @@ namespace ProResp2
     /// <summary>
     /// Interaction logic for ValveWeightControl.xaml
     /// </summary>
+    using System.Text.RegularExpressions;
     public partial class ValveWeightControl : UserControl
     {
         public ValveWeightControl()
@@ -28,5 +29,11 @@ namespace ProResp2
 
         public int ValveNum { get; set; }
         public string Weight { get; set; }
+
+        private void textBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9.]"); // \.
+            e.Handled = regex.IsMatch(e.Text);
+        }
     }
 }

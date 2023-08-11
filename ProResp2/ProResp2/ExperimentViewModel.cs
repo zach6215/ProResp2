@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +10,8 @@ namespace ProResp2
     using System.Windows.Threading;
     using ExperimentEngine;
     using System.IO;
-    using System.Threading;
-
-    internal class ExperimentViewModel
+    using System.ComponentModel;
+    internal class ExperimentViewModel : INotifyPropertyChanged
     {
         //private static bool experimentRunning = false;
         private ExperimentEngine? experimentEngine;
@@ -24,42 +23,43 @@ namespace ProResp2
         private int dataPollSec = 5;
         private String valveSwitchMin = "15";
         private DateTime startDateTime;
-        String[] valveWieghts = new String[24];
-        Valve activeValve;
-        Valve previousValve;
+        private String[] valveWieghts = new String[24];
+        public event PropertyChangedEventHandler? PropertyChanged;
         MccBoard board = new MccBoard(0);
-
 
         public string? FilePath { get { return this.filePath; } set { this.filePath = value; } }
         public bool ExperimentRunning { get { return experimentRunning;} }
         public Valve ActiveValve { get { return this.activeValve; } set { this.activeValve = value; } }
-        public String ValveSwitchMin { get { return this.valveSwitchMin; } set { this.valveSwitchMin = value;} }
-        public Valve PreviousValve { get { return this.previousValve; } set { this.previousValve = value; } }
+        public String ValveSwitchMin { get { return this.valveSwitchMin; } 
+            set { this.valveSwitchMin = value; PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ValveSwitchMin")); } }
 
+        Valve activeValve;
+        Valve previousValve;
+
+        
 
         public ExperimentViewModel()
         {
-            this.ValveSwitchMin = "15";
         }
 
-        internal void StartNewExperiment(List<int> argValveNums)
+        internal void StartNewExperiment(List<int> argValveNums, List<double> argValveWeights)
         {
+            if (valveSwitchMin == null)
+            {
+                valveSwitchMin = "15";
+            }
+            if (!int.TryParse(valveSwitchMin, out int valveSwitchTime))
+            {
+                throw new Exception("Invalid valve switch time!");
+            }
 
-            this.experimentEngine = new ExperimentEngine(argValveNums);
-            this.config();
+            this.experimentEngine = new ExperimentEngine(argValveNums, argValveWeights);
 
             this.ActiveValve = experimentEngine.ActiveValve;
-            this.PreviousValve = new Valve(0);
-
-            this.open(this.ActiveValve.ValveNum);
 
             this.pollDataTimer = new DispatcherTimer();
             this.pollDataTimer.Interval = TimeSpan.FromSeconds(this.dataPollSec);
             this.pollDataTimer.Tick += this.PollData;
-
-            this.valveSwitchTimer = new DispatcherTimer();
-            this.valveSwitchTimer.Interval = TimeSpan.FromMinutes(1);
-            this.valveSwitchTimer.Tick += this.SwitchValves;
 
             this.experimentRunning = true;
             this.WriteDataHeader();
@@ -94,7 +94,6 @@ namespace ProResp2
             close(currentValveNum-1);
             
         }
-
 
         private void WriteDataHeader()
         {
@@ -136,7 +135,7 @@ namespace ProResp2
                 sw.Close();
             }
         }
-
+        
         public void CheckAllPorts()
         {
             config();
@@ -161,7 +160,6 @@ namespace ProResp2
             ConfigurePort(board, DigitalPortType.FirstPortCH);
             ConfigurePort(board, DigitalPortType.FirstPortCL);
         }
-
         void ConfigurePort(MccBoard board, DigitalPortType portType)
         {
             DigitalPortDirection direction = DigitalPortDirection.DigitalOut;
@@ -190,6 +188,5 @@ namespace ProResp2
                 SetPort(board, i, DigitalLogicState.Low);
             }
         }
-
     }
 }

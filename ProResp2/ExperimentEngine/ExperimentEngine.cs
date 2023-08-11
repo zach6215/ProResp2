@@ -1,10 +1,8 @@
-﻿
 namespace ExperimentEngine
 {
     using System;
     using System.Timers;
     using System.Collections.Generic;
-    
 
     public class ExperimentEngine
     {
@@ -39,7 +37,7 @@ namespace ExperimentEngine
         //    }
         //}
 
-        public ExperimentEngine(List<int> argActiveValves)
+        public ExperimentEngine(List<int> argActiveValves, List<double> argValveWeights)
         {
             this.valvesList = new LinkedList<Valve>();
             this.LI7000 = new LI7000Connection();
@@ -49,9 +47,10 @@ namespace ExperimentEngine
 
             string[] units = LI7000DataHeader.Split('\t');
 
+            int j = 0;
             foreach (int valveNum in argActiveValves)
             {
-                Valve newValve = new Valve(valveNum);
+                Valve newValve = new Valve(valveNum, argValveWeights[j]);
 
                 for (int i = 0; i < units.Length; i++)
                 {
@@ -121,7 +120,6 @@ namespace ExperimentEngine
             }
         }
 
-
         public void Stop()
         {
             //Disconnect all devices
@@ -133,4 +131,3 @@ namespace ExperimentEngine
             //Close stream
         }
     }
-}

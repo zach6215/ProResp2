@@ -1,4 +1,4 @@
-﻿namespace ExperimentEngine
+namespace ExperimentEngine
 {
     using System.ComponentModel;
     public class Valve : INotifyPropertyChanged
@@ -11,6 +11,7 @@
 
 
         public int ValveNum { get; private set; }
+        public double Weight { get; private set; }
         public DateTime MeasurementDateTime { get; internal set; }
 
         public double CO2 
@@ -40,6 +41,12 @@
         public Valve(int argValveNum)
         {
             this.ValveNum = argValveNum;
+        }
+
+        public Valve(int argValveNum, double argWeight)
+        {
+            this.ValveNum = argValveNum;
+            this.Weight = argWeight;
         }
 
     }

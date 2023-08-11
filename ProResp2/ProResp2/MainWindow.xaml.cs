@@ -1,4 +1,4 @@
-﻿namespace ProResp2
+namespace ProResp2
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +16,7 @@
     {
         ExperimentViewModel experimentViewModel = new ExperimentViewModel();
         List<CheckBox> valveCheckBoxes = new List<CheckBox>();
+        List<ValveWeightControl> valveWeightControls = new List<ValveWeightControl>();
         
 
         public MainWindow()
@@ -30,12 +31,19 @@
                 newCheckBox.Name = "checkBoxValve" + (i + 1).ToString();
                 this.valveCheckBoxes.Add(newCheckBox);
             }
+
             this.SetValveWeightGrid(this.valveWeightGrid);
             this.selectValveListBox.ItemsSource = this.valveCheckBoxes;
             this.stopButton.IsEnabled = false;
 
-            //Set valve switch time
-            
+            //Set Valve Time
+            Binding binding = new Binding("ValveSwitchMin");
+            binding.Source = this.experimentViewModel;
+            binding.Mode = BindingMode.TwoWay;
+            binding.ValidationRules.Add(new ValveSwitchTimeValidationRule());
+            this.valveSwitchTextBox.SetBinding(TextBox.TextProperty, binding);
+            this.experimentViewModel.ValveSwitchMin = "15";
+
         }
 
         private void SetValveWeightGrid(Grid argGrid)
@@ -66,10 +74,12 @@
                     valveWeightControl.Name = "valveWeightControl" + valveNum;
                     valveWeightControl.ValveNum = valveNum;
 
-                    //Bind textBox to checkBoxValve + valveNum
+                    //Bind textBox.IsEnabled to checkBoxValve + valveNum
                     Binding binding = new Binding("IsChecked");
                     binding.Source = valveCheckBoxes[valveNum - 1];
                     valveWeightControl.textBox.SetBinding(TextBox.IsEnabledProperty, binding);
+
+                    this.valveWeightControls.Add(valveWeightControl);
 
                     Grid.SetColumn(valveWeightControl, i);
                     Grid.SetRow(valveWeightControl, j);
@@ -81,11 +91,12 @@
 
         private void checkAllValvesButton_Click(object sender, RoutedEventArgs e)
         {
-            experimentViewModel.CheckAllPorts();
+          experimentViewModel.CheckAllPorts();
         }
 
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
+
             if (experimentViewModel.ExperimentRunning == true)
             {
                 MessageBox.Show("There is already an experiment running! Please stop this experiment before starting another.");
@@ -98,11 +109,28 @@
             }
 
             List<int> valveNums = new List<int>();
+            List<double> valveWeights = new List<double>();
             foreach (CheckBox item in this.valveCheckBoxes)
             {
                 if (item.IsChecked == true)
                 {
                     valveNums.Add(int.Parse(item.Content.ToString().Replace("Valve ", string.Empty)));
+                    if(!string.IsNullOrEmpty(this.valveWeightControls[valveNums.Count - 1].textBox.Text))
+                    {
+                        if (double.TryParse(this.valveWeightControls[valveNums.Count - 1].textBox.Text, out double valveWeight))
+                        {
+                            valveWeights.Add(valveWeight);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Invalid weight for Valve {valveWeightControls[valveNums.Count - 1].Name.Replace("valveWeightControl", String.Empty)}");
+                        }
+                    }
+                    else
+                    {
+                        valveWeights.Add(0);
+                    }
+
                 }
             }
 
@@ -114,7 +142,7 @@
 
             try
             {
-                experimentViewModel.StartNewExperiment(valveNums);
+                experimentViewModel.StartNewExperiment(valveNums, valveWeights);
 
                 //Active valve binding
                 Binding binding = new Binding("ValveNum");
@@ -149,13 +177,6 @@
                 binding.StringFormat = "Current Flow: {0}" + experimentViewModel.ActiveValve.FlowUnits;
                 binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                 this.currentFlowTextBlock.SetBinding(TextBlock.TextProperty, binding);
-
-                //Previous valve bindings
-                binding = new Binding("ValveNum");
-                binding.Source = this.experimentViewModel.PreviousValve;
-                binding.StringFormat = "Previous Valve: {0}";
-                binding.TargetNullValue = "n/a";
-                this.previousValveTextBlock.SetBinding(TextBlock.TextProperty, binding);
             }
             catch (Exception ex)
             {
@@ -207,7 +228,7 @@
         private void stopButton_Click(object sender, RoutedEventArgs e)
         {
             experimentViewModel.StopExperiment();
-            //CHANGE TO DATA BINDING
+
             this.dataFileTextBlock.Text = "Current Data File:";
 
             this.experimentGroupBox.Visibility = Visibility.Collapsed;
@@ -228,6 +249,6 @@
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-        
+
     }
 }
