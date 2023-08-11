@@ -14,6 +14,6 @@
         <TextBlock Text="{Binding ValveNum, StringFormat='Valve {0}'}"
                    VerticalAlignment="Center" Style="{StaticResource BasicTextBlock}"></TextBlock>
         <TextBox x:Name="textBox" MinWidth="30" MaxHeight="20" MaxLines="1" 
-                 Grid.Column="1" VerticalAlignment="Center"></TextBox>
+                 Grid.Column="1" VerticalAlignment="Center" PreviewTextInput="textBox_PreviewTextInput"></TextBox>
     </Grid>
 </UserControl>
